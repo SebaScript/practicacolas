@@ -1,7 +1,7 @@
 class ColaDePrioridad:
     def __init__(self):
         self.solicitudes: list[dict] = []
-        self.colas_urgencia: dict = {}
+        self.lotes = {}
         self.contador: int = 0
         self.longitud: int = 0
 
@@ -9,10 +9,8 @@ class ColaDePrioridad:
         return self.longitud == 0
 
     def reordenar_cola(self):
-        self.solicitudes.sort(key=lambda x: x["urgencia"], reverse=True)
-
-    def reordenar_cola_por_nombre(self):
         self.solicitudes.sort(key=lambda x: x["nombre_cliente"])
+        self.solicitudes.sort(key=lambda x: x["urgencia"], reverse=True)
 
     def agregar_solicitud(self, nombre, descripcion, urgencia):
         solicitud = {
@@ -67,24 +65,17 @@ class ColaDePrioridad:
         while not self.esta_vacia():
             self.atender_solicitud()
 
-    def atender_solicitudes_por_lote(self):
+    def atender_por_lotes(self):
+        for solicitud in self.solicitudes:
+            urgencia_solicitud = solicitud["urgencia"]
+            if urgencia_solicitud not in self.lotes:
+                self.lotes[urgencia_solicitud] = ColaDePrioridad()
+            self.lotes[urgencia_solicitud].agregar_solicitud(solicitud["nombre_cliente"], solicitud["descripcion"], urgencia_solicitud)
 
-        nueva_cola = ColaDePrioridad()
-        for i in self.solicitudes:
-            nueva_cola.agregar_solicitud(i["nombre_cliente"], i["descripcion"], i["urgencia"])
-        nueva_cola.reordenar_cola_por_nombre()
-        nueva_cola.reordenar_cola()
-
-        for solicitud in nueva_cola.solicitudes:
-            urgencia = solicitud["urgencia"]
-            if urgencia not in self.colas_urgencia:
-                self.colas_urgencia[urgencia] = ColaDePrioridad()
-            self.colas_urgencia[urgencia].agregar_solicitud(solicitud["nombre_cliente"], solicitud["descripcion"], urgencia)
-
-        for lote in self.colas_urgencia.values():
+        for lote in self.lotes.values():
             while not lote.esta_vacia():
                 lote.atender_solicitud()
-            print("\nlote atendido\n")
+            print("\n----------------------------------------------\n")
 
 
 cola = ColaDePrioridad()
@@ -92,11 +83,5 @@ cola = ColaDePrioridad()
 nombre_archivo = "solicitudes.txt"
 
 cola.cargar_solicitudes_desde_archivo(nombre_archivo)
-print(cola.solicitudes)
 
-print("\n")
-cola.mostrar_solicitudes()
-
-print("\n***********************************************\n")
-
-cola.atender_solicitudes_por_lote()
+cola.atender_por_lotes()
