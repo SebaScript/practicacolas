@@ -1,6 +1,7 @@
 class ColaDePrioridad:
     def __init__(self):
         self.solicitudes: list[dict] = []
+        self.colas_urgencia: dict = {}
         self.contador: int = 0
         self.longitud: int = 0
 
@@ -73,7 +74,17 @@ class ColaDePrioridad:
             nueva_cola.agregar_solicitud(i["nombre_cliente"], i["descripcion"], i["urgencia"])
         nueva_cola.reordenar_cola_por_nombre()
         nueva_cola.reordenar_cola()
-        nueva_cola.mostrar_solicitudes()
+
+        for solicitud in nueva_cola.solicitudes:
+            urgencia = solicitud["urgencia"]
+            if urgencia not in self.colas_urgencia:
+                self.colas_urgencia[urgencia] = ColaDePrioridad()
+            self.colas_urgencia[urgencia].agregar_solicitud(solicitud["nombre_cliente"], solicitud["descripcion"], urgencia)
+
+        for lote in self.colas_urgencia.values():
+            while not lote.esta_vacia():
+                lote.atender_solicitud()
+            print("\nlote atendido\n")
 
 
 cola = ColaDePrioridad()
