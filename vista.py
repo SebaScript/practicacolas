@@ -24,11 +24,11 @@ class VistaColaDePrioridad:
 
                 while True:
                     try:
-                        urgencia = int(input("Ingrese el nivel de urgencia (1-10): "))
+                        urgencia = int(input("Ingrese el nivel de urgencia (1-5): "))
                         if 1 <= urgencia <= 10:
                             break
                         else:
-                            print("La urgencia debe estar en el rango de 1 a 10. Por favor ingresela de nuevo.")
+                            print("La urgencia debe estar en el rango de 1 a 5. Por favor ingresela de nuevo.")
                     except ValueError:
                         print("Por favor ingrese un número válido de urgencia.")
 
@@ -50,8 +50,8 @@ class VistaColaDePrioridad:
                 while True:
                     try:
                         id = int(input("Ingrese el ID de la solicitud: "))
-                        nueva_urgencia = int(input("Ingrese la nueva urgencia (1-10): "))
-                        if 1 <= nueva_urgencia <= 10:
+                        nueva_urgencia = int(input("Ingrese la nueva urgencia (1-5): "))
+                        if 1 <= nueva_urgencia <= 5:
                             self.cola.actualizar_urgencia(id, nueva_urgencia)
                             break
                     except ValueError:

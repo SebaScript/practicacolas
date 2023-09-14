@@ -8,7 +8,8 @@ class ColaDePrioridad:
         return self.longitud == 0
 
     def reordenar_cola(self):
-        self.solicitudes.sort(key=lambda x: x["urgencia"], reverse=True)
+        self.solicitudes.sort(key=lambda x: x["nombre_cliente"])
+        self.solicitudes.sort(key = lambda x: x["urgencia"], reverse=True)
 
     def agregar_solicitud(self, nombre, descripcion, urgencia):
         solicitud = {
@@ -55,9 +56,7 @@ class ColaDePrioridad:
             lineas = archivo.readlines()
             for linea in lineas:
                 datos = linea.strip().split(', ')
-                print(datos)
                 numero_solicitud, nombre_cliente, descripcion, urgencia = datos
-                print(nombre_cliente)
                 urgencia = int(urgencia.rstrip('"'))
                 self.agregar_solicitud(nombre_cliente, descripcion, urgencia)
 
@@ -65,11 +64,24 @@ class ColaDePrioridad:
         while not self.esta_vacia():
             self.atender_solicitud()
 
+    def atender_solicitudes_por_lote(self):
+        lote = []
+        while not self.esta_vacia():
+            lote.append(self.solicitudes.pop(0))
+            print(lote)
+
 
 cola = ColaDePrioridad()
 
 nombre_archivo = "solicitudes.txt"
-cola.cargar_solicitudes_desde_archivo(nombre_archivo)
 
+cola.cargar_solicitudes_desde_archivo(nombre_archivo)
+print(cola.solicitudes)
+
+print("\n")
 cola.mostrar_solicitudes()
-cola.atender_solicitudes_automaticamente()
+
+print("\n***********************************************\n")
+
+cola.atender_solicitudes_por_lote()
+cola.mostrar_solicitudes()

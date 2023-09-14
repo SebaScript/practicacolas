@@ -9,7 +9,7 @@ def generar_solicitudes(cola, numero_solicitudes):
     nombre = "a"
     descripcion = "b"
     for i in range(numero_solicitudes):
-        urgencia = random.randint(1, 10)
+        urgencia = random.randint(1, 5)
         cola.agregar_solicitud(nombre, descripcion, urgencia)
 
 
@@ -17,8 +17,7 @@ cola = ColaDePrioridad()
 generar_solicitudes(cola, 10000)
 
 cola.mostrar_solicitudes()
-cola.atender_solicitudes_automaticamente()
 
 tfinal = time.time()
 ttotal = tfinal-tinicial
-print(ttotal)
+print(f"Tiempo de ejecución: {ttotal}")
