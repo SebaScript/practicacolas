@@ -8,8 +8,10 @@ class ColaDePrioridad:
         return self.longitud == 0
 
     def reordenar_cola(self):
+        self.solicitudes.sort(key=lambda x: x["urgencia"], reverse=True)
+
+    def reordenar_cola_por_nombre(self):
         self.solicitudes.sort(key=lambda x: x["nombre_cliente"])
-        self.solicitudes.sort(key = lambda x: x["urgencia"], reverse=True)
 
     def agregar_solicitud(self, nombre, descripcion, urgencia):
         solicitud = {
@@ -65,10 +67,13 @@ class ColaDePrioridad:
             self.atender_solicitud()
 
     def atender_solicitudes_por_lote(self):
-        lote = []
-        while not self.esta_vacia():
-            lote.append(self.solicitudes.pop(0))
-            print(lote)
+
+        nueva_cola = ColaDePrioridad()
+        for i in self.solicitudes:
+            nueva_cola.agregar_solicitud(i["nombre_cliente"], i["descripcion"], i["urgencia"])
+        nueva_cola.reordenar_cola_por_nombre()
+        nueva_cola.reordenar_cola()
+        nueva_cola.mostrar_solicitudes()
 
 
 cola = ColaDePrioridad()
@@ -84,4 +89,3 @@ cola.mostrar_solicitudes()
 print("\n***********************************************\n")
 
 cola.atender_solicitudes_por_lote()
-cola.mostrar_solicitudes()
