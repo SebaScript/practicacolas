@@ -14,12 +14,10 @@ def generar_solicitudes(cola, numero_solicitudes):
 
 
 cola = ColaDePrioridad()
-generar_solicitudes(cola, 5)
-
-
-print("\n ******************************************+ \n")
+generar_solicitudes(cola, 10000)
 
 cola.mostrar_solicitudes()
+cola.atender_solicitudes_automaticamente()
 
 tfinal = time.time()
 ttotal = tfinal-tinicial
